@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package flotilla;
+
+// Java options
+option java_package = "app.flotilla";
+option java_multiple_files = true;
+
+service EdgeService {
+    rpc Echo(EchoMessage) returns (EchoMessage) {}
+    rpc SendLeNetModel(LeNetModelRequest) returns (LeNetModelResponse) {}
+    rpc RunInference(InferenceRequest) returns (InferenceResponse) {}
+}
+
+message EchoMessage {
+    string text = 1;
+}
+
+// TFLite model messages
+message LeNetModelRequest {
+    string request_id = 1;
+    string model_type = 2; // "lenet", "custom", etc.
+}
+
+message LeNetModelResponse {
+    string model_name = 1;
+    bytes model_bytes = 2;           // TFLite binary data
+    string model_format = 3;         // "tflite"
+    map<string, string> metadata = 4; // Model metadata
+    string status = 5;
+}
+
+// Inference messages
+message InferenceRequest {
+    string request_id = 1;
+    repeated float input_data = 2;   // Input image data (flattened)
+    repeated int32 input_shape = 3;  // Input shape [batch, height, width, channels]
+}
+
+message InferenceResponse {
+    string request_id = 1;
+    repeated float output_data = 2;  // Model predictions
+    repeated int32 output_shape = 3; // Output shape
+    string status = 4;
+}
