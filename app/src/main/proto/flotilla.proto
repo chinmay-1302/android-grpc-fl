@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package flotilla;
 
+option java_multiple_files = true;
 // Java options
 option java_package = "app.flotilla";
-option java_multiple_files = true;
 
 service EdgeService {
     rpc Echo(EchoMessage) returns (EchoMessage) {}
@@ -12,9 +12,7 @@ service EdgeService {
     rpc RunInference(InferenceRequest) returns (InferenceResponse) {}
 }
 
-message EchoMessage {
-    string text = 1;
-}
+message EchoMessage { string text = 1; }
 
 // TFLite model messages
 message LeNetModelRequest {
@@ -24,8 +22,8 @@ message LeNetModelRequest {
 
 message LeNetModelResponse {
     string model_name = 1;
-    bytes model_bytes = 2;           // TFLite binary data
-    string model_format = 3;         // "tflite"
+    bytes model_bytes = 2;            // TFLite binary data
+    string model_format = 3;          // "tflite"
     map<string, string> metadata = 4; // Model metadata
     string status = 5;
 }
@@ -33,8 +31,9 @@ message LeNetModelResponse {
 // Inference messages
 message InferenceRequest {
     string request_id = 1;
-    repeated float input_data = 2;   // Input image data (flattened)
-    repeated int32 input_shape = 3;  // Input shape [batch, height, width, channels]
+    repeated float input_data = 2; // Input image data (flattened)
+    repeated int32 input_shape =
+            3; // Input shape [batch, height, width, channels]
 }
 
 message InferenceResponse {
